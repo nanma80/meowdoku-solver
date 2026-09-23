@@ -26,7 +26,7 @@ Detection is validated on the two supplied 8×8 boards. Other sizes are supporte
 
 The runtime uses only HTML, CSS, JavaScript, and relative asset URLs. The Pages workflow deploys the six runtime files on pushes to `main`; there is no build step or backend. `server.mjs` is only a local development server and listens on the local network for phone testing.
 
-Live site: <https://nanma80.github.io/meowdoku-solver/>
+Live site: <https://www.nan.ma/meowdoku-solver/> (uses the GitHub account's existing Pages custom domain).
 
 The initial MVP was also tested end to end on an iPhone over home Wi-Fi. The user reported a new 10×10 level solved in less than one second.
 
