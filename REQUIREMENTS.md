@@ -39,12 +39,12 @@ Selecting an image makes it available to the browser locally. No server upload, 
 
 ## Available examples
 
-| File | Purpose |
-| --- | --- |
-| `screenshots/IMG_4186.png` | Untouched first 8×8 board; primary input fixture. |
-| `screenshots/IMG_4187.png` | Same board with seven cats placed; reference for verification. |
-| `screenshots/IMG_4189.png` | Completed first board with celebration overlays; reference for verification. |
-| `screenshots/second_level.png` | Untouched second 8×8 board, level 351; additional input fixture. |
+| File                           | Purpose                                                                      |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| `screenshots/IMG_4186.png`     | Untouched first 8×8 board; primary input fixture.                            |
+| `screenshots/IMG_4187.png`     | Same board with seven cats placed; reference for verification.               |
+| `screenshots/IMG_4189.png`     | Completed first board with celebration overlays; reference for verification. |
+| `screenshots/second_level.png` | Untouched second 8×8 board, level 351; additional input fixture.             |
 
 The first board's reference solution is `[3, 7, 4, 2, 5, 1, 6, 0]`. Its previously missing cat is at row 2, column 8 in one-based coordinates.
 

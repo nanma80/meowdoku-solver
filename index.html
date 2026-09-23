@@ -1,19 +1,36 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Meowdoku solver</title><link rel="stylesheet" href="./style.css">
-</head>
-<body>
-  <main>
-    <header><span class="eyebrow">A LITTLE HELP WITH YOUR NEXT PUZZLE</span><h1>Meowdoku solver<span class="dot">.</span></h1><p>Choose a screenshot. Find a spot for every cat.</p></header>
-    <section class="workspace" aria-label="Puzzle solver">
-      <div class="toolbar"><label class="choose" for="photo">Choose screenshot<input id="photo" type="file" accept="image/*"></label><button id="solve" disabled>Solve</button></div>
-      <p id="status" role="status" aria-live="polite">Start with a screenshot of an untouched board.</p>
-      <div id="empty"><span class="grid-icon" aria-hidden="true">▦</span><h2>Your next puzzle goes here</h2><p>Select a photo to preview the board.</p></div>
-      <canvas id="preview" hidden aria-label="Selected screenshot"></canvas>
-    </section>
-    <footer>Your photo stays on this device. No upload, no account.</footer>
-  </main>
-  <script type="module" src="./app.js"></script>
-</body></html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meowdoku solver</title>
+    <link rel="stylesheet" href="./styles/app.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="eyebrow">A LITTLE HELP WITH YOUR NEXT PUZZLE</span>
+        <h1>Meowdoku solver<span class="dot">.</span></h1>
+        <p>Choose a screenshot. Find a spot for every cat.</p>
+      </header>
+      <section class="workspace" aria-label="Puzzle solver">
+        <div class="toolbar">
+          <label class="choose" for="photo"
+            >Choose screenshot<input id="photo" type="file" accept="image/*" /></label
+          ><button id="solve" disabled>Solve</button>
+        </div>
+        <p id="status" role="status" aria-live="polite">
+          Start with a screenshot of an untouched board.
+        </p>
+        <div id="empty">
+          <span class="grid-icon" aria-hidden="true">▦</span>
+          <h2>Your next puzzle goes here</h2>
+          <p>Select a photo to preview the board.</p>
+        </div>
+        <canvas id="preview" hidden aria-label="Selected screenshot"></canvas>
+      </section>
+      <footer>Your photo stays on this device. No upload, no account.</footer>
+    </main>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
