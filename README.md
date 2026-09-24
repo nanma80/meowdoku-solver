@@ -41,7 +41,7 @@ Start reading at `src/app.js` for the UI flow, `src/detection/board.js` for imag
 
 The worker receives image pixels and returns a board plus an array of zero-based cat columns. A board contains `size`, `colors` (the region-ID matrix), `palette` (RGB colors), and `cells` (a matrix of `{ x, y, width, height }`). Cell centers and dimensions are in detection-image pixels. The overlay converts them back into original-image coordinates using the sampling scale.
 
-Detection is validated on the two supplied 8×8 boards. Other sizes are supported by the detector's geometry search but still need real screenshot validation. Existing marks and celebration overlays are not supported inputs. No manual correction controls or worst-case performance optimizations are included yet.
+Detection supports 5×5 through 12×12 and is validated on the two supplied 8×8 boards and the 12×12 daily puzzle in `screenshots/12x12.png`. Other sizes still need real screenshot validation. Existing marks and celebration overlays are not supported inputs. No manual correction controls or worst-case performance optimizations are included yet.
 
 ## GitHub Pages
 

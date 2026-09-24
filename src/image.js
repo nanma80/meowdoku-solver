@@ -14,7 +14,7 @@ export async function loadImage(file) {
   }
 }
 
-/** Bound detection cost while leaving even 11×11 cells large enough to sample. */
+/** Bound detection cost while leaving even 12×12 cells large enough to sample. */
 export function createDetectionImage(image) {
   const scale = Math.min(1, MAX_DETECTION_WIDTH / image.naturalWidth);
   const sampleCanvas = document.createElement('canvas');

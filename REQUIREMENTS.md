@@ -21,7 +21,7 @@ Selecting an image makes it available to the browser locally. No server upload, 
 - The board is an N×N grid.
 - Place exactly one cat in each row, each column, and each color.
 - Cats cannot touch, including diagonally.
-- Expected game sizes are approximately 5×5 through 11×11; the upper limit is not yet confirmed. Detect dimensions rather than hardcoding 8×8.
+- Support game sizes from 5×5 through 12×12. Detect dimensions rather than hardcoding 8×8.
 - Represent a solution as an array of N zero-based column indices, ordered from the top row to the bottom row.
 - Start with the user's existing brute-force algorithm: enumerate permutations of `0..N-1`, require adjacent entries to differ by at least 2, and require each selected cell to have a different color.
 - The existing Python implementation is at `C:\Users\ma_na\Documents\JobHunting2026\practice_coding\meowdoku`. Inspect it before porting the algorithm to browser-compatible JavaScript.
@@ -65,7 +65,7 @@ The partially filled and celebration screenshots are reference material, not req
 ## Initial acceptance criteria
 
 - Both untouched example screenshots can be selected and previewed locally.
-- Clicking Solve automatically extracts each 8×8 board without manual matrix entry.
+- Clicking Solve automatically extracts the supplied 8×8 and 12×12 boards without manual matrix entry.
 - The first board matches the known reference solution; both outputs satisfy the game rules.
 - Solution circles appear in the correct cells on the original image and remain aligned as it scales.
 - Choosing a new image clears the previous result and supports solving again.

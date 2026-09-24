@@ -10,6 +10,7 @@ const { PNG } = require('pngjs');
 const fixtures = [
   { filename: 'IMG_4186.png', solution: [3, 7, 4, 2, 5, 1, 6, 0] },
   { filename: 'second_level.png', solution: [6, 1, 3, 0, 4, 2, 5, 7] },
+  { filename: '12x12.png', solution: [2, 4, 11, 5, 7, 10, 0, 8, 1, 6, 9, 3] },
 ];
 
 for (const { filename, solution } of fixtures) {
@@ -18,8 +19,8 @@ for (const { filename, solution } of fixtures) {
     const imageData = PNG.sync.read(readFileSync(screenshotPath));
     const board = detectBoard(imageData);
 
-    assert.equal(board.size, 8);
-    assert.equal(board.palette.length, 8);
+    assert.equal(board.size, solution.length);
+    assert.equal(board.palette.length, solution.length);
 
     const actualSolution = solve(board.colors);
     assert.deepEqual(actualSolution, solution);
