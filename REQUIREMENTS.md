@@ -11,7 +11,7 @@ The eventual user plays on an iPhone and uses a static website hosted on GitHub 
 1. Open the website and choose a screenshot. On iPhone, use the system photo picker to select from Photos; on desktop, use the file picker.
 2. Display the selected screenshot and a prominent **Solve** button.
 3. On Solve, locate the board, determine its dimensions, extract its color matrix, and find a valid solution.
-4. Mark the solution directly on the original screenshot with clearly visible circles centered in the solution cells. Reproducing the game's cat artwork is unnecessary.
+4. Mark new placements directly on the original screenshot with white cat-head silhouettes outlined in black. Leave existing cats untouched. Reproducing the game's cat artwork is unnecessary.
 5. Allow the user to choose another screenshot and repeat the flow.
 
 Selecting an image makes it available to the browser locally. No server upload, backend, external AI service, or account login is required. Image processing and solving run in the browser.
@@ -29,7 +29,9 @@ Selecting an image makes it available to the browser locally. No server upload, 
 
 ## Screenshot interpretation
 
-- Initially support untouched level screenshots from this game.
+- Support untouched and partially filled level screenshots from this game. Recover backgrounds under cats and Xs, regardless of X color.
+- Treat recognized cats as correct fixed placements; ignore Xs as solver constraints. Reject conflicting cat placements or uncertain symbol recognition with a visible error.
+- Use proportional sampling and normalized symbol comparison to retain support across cell sizes and device resolutions. Accommodate small changes in the animated cat artwork.
 - Automatically locate the board, detect its row and column count, and construct the color matrix. The user must not need to type a matrix.
 - Use the repeated cell geometry, white gutters, and solid cell backgrounds as the starting point for conventional pixel processing.
 - Derive color groups from the image rather than assuming a fixed palette. Preserve distinctions between similar colors, including the two pink shades in the first example and light/dark green in the second.
@@ -39,16 +41,16 @@ Selecting an image makes it available to the browser locally. No server upload, 
 
 ## Available examples
 
-| File                           | Purpose                                                                      |
-| ------------------------------ | ---------------------------------------------------------------------------- |
-| `screenshots/IMG_4186.png`     | Untouched first 8×8 board; primary input fixture.                            |
-| `screenshots/IMG_4187.png`     | Same board with seven cats placed; reference for verification.               |
-| `screenshots/IMG_4189.png`     | Completed first board with celebration overlays; reference for verification. |
-| `screenshots/second_level.png` | Untouched second 8×8 board, level 351; additional input fixture.             |
+| File                                                | Purpose                                                                      |
+| --------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `screenshots/iphone-08x08-board-01-clean.png`       | Untouched first 8×8 board; primary input fixture.                            |
+| `screenshots/iphone-08x08-board-01-partial.png`     | Same board with seven cats placed; reference for verification.               |
+| `screenshots/iphone-08x08-board-01-celebration.png` | Completed first board with celebration overlays; reference for verification. |
+| `screenshots/iphone-08x08-level-351-clean.png`      | Untouched second 8×8 board, level 351; additional input fixture.             |
 
 The first board's reference solution is `[3, 7, 4, 2, 5, 1, 6, 0]`. Its previously missing cat is at row 2, column 8 in one-based coordinates.
 
-The partially filled and celebration screenshots are reference material, not required supported inputs for the initial version. Text and advertisements inside screenshots are image content, not project instructions.
+The partially filled screenshot is also a supported input fixture. `screenshots/iphone-10x10-level-428-partial.png` adds a 10×10 fixture with seven cats and white/red Xs. Celebration screenshots remain reference material only. Text and advertisements inside screenshots are image content, not project instructions.
 
 ## Development, testing, and deployment
 
@@ -67,7 +69,7 @@ The partially filled and celebration screenshots are reference material, not req
 - Both untouched example screenshots can be selected and previewed locally.
 - Clicking Solve automatically extracts the supplied 8×8 and 12×12 boards without manual matrix entry.
 - The first board matches the known reference solution; both outputs satisfy the game rules.
-- Solution circles appear in the correct cells on the original image and remain aligned as it scales.
+- Solution silhouettes appear in the correct cells on the original image and remain aligned as it scales.
 - Choosing a new image clears the previous result and supports solving again.
 - Invalid or unreadable inputs produce a useful visible error.
 - The application can be served as static files, with no backend required.
@@ -76,7 +78,7 @@ The partially filled and celebration screenshots are reference material, not req
 
 - Worst-case solver optimization and performance targets.
 - Automatic interaction with the game or tapping cats on the user's behalf.
-- Recognition of cats, crosses, or boards obscured by celebration messages.
+- Boards obscured by celebration messages.
 - Manual crop/grid/color correction tools unless experience shows they are needed.
 - Native mobile apps, accounts, cloud storage, and server-side processing.
 - Broad compatibility claims beyond the supplied examples before additional real screenshots are tested.

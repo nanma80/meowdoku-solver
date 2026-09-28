@@ -8,7 +8,7 @@ const MAX_ASPECT_RATIO = 1.15;
 const MIN_COLOR_COVERAGE = 0.85;
 
 /** Find solid colored components separated by the board's white gutters. */
-export function findCandidateCells(imageData) {
+export function findCandidateCells(imageData, minimumCoverage = MIN_COLOR_COVERAGE) {
   const { width, height } = imageData;
   const coloredPixels = createColorMask(imageData);
   const floodFillQueue = new Int32Array(width * height);
@@ -27,7 +27,7 @@ export function findCandidateCells(imageData) {
       height,
     );
 
-    if (looksLikeCell(component, width)) {
+    if (looksLikeCell(component, width, minimumCoverage)) {
       cells.push({
         x: (component.minX + component.maxX) / 2,
         y: (component.minY + component.maxY) / 2,
@@ -109,7 +109,7 @@ function collectComponent(startIndex, mask, queue, imageWidth, imageHeight) {
   };
 }
 
-function looksLikeCell(component, imageWidth) {
+function looksLikeCell(component, imageWidth, minimumCoverage) {
   const { width, height, pixelCount } = component;
   const aspectRatio = height / width;
   const colorCoverage = pixelCount / (width * height);
@@ -119,6 +119,6 @@ function looksLikeCell(component, imageWidth) {
     width < imageWidth * MAX_CELL_WIDTH_RATIO &&
     aspectRatio > MIN_ASPECT_RATIO &&
     aspectRatio < MAX_ASPECT_RATIO &&
-    colorCoverage > MIN_COLOR_COVERAGE
+    colorCoverage > minimumCoverage
   );
 }

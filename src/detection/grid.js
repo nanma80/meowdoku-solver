@@ -5,8 +5,9 @@ const ROW_ALIGNMENT_TOLERANCE = 0.15;
 const GRID_ALIGNMENT_TOLERANCE = 0.08;
 const MAX_SPACING_TO_WIDTH_RATIO = 1.4;
 
-/** Return cells arranged by row and column, or null if no square grid is found. */
+/** Return the largest square grid, or null if no square grid is found. */
 export function findSquareGrid(candidateCells) {
+  let largestGrid = null;
   for (const anchorCell of candidateCells) {
     const similarCells = candidateCells.filter((cell) => {
       return (
@@ -19,18 +20,19 @@ export function findSquareGrid(candidateCells) {
     const rows = groupCellsIntoRows(similarCells, anchorCell.height);
 
     for (let boardSize = MIN_BOARD_SIZE; boardSize <= MAX_BOARD_SIZE; boardSize++) {
+      if (boardSize <= (largestGrid?.length ?? 0)) continue;
       const matchingRows = rows.filter((row) => row.length === boardSize);
 
       for (let offset = 0; offset <= matchingRows.length - boardSize; offset++) {
         const grid = matchingRows.slice(offset, offset + boardSize);
         if (isRegularSquareGrid(grid, anchorCell.width)) {
-          return grid;
+          largestGrid = grid;
         }
       }
     }
   }
 
-  return null;
+  return largestGrid;
 }
 
 function groupCellsIntoRows(cells, cellHeight) {

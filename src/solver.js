@@ -2,17 +2,51 @@
  * Return zero-based cat columns, ordered from top row to bottom, or null.
  * A permutation already guarantees one cat per row and per column.
  */
-export function solve(colorMatrix) {
+export function solve(colorMatrix, fixedCats = []) {
   const boardSize = colorMatrix.length;
+  validateFixedCats(colorMatrix, fixedCats);
   const columnsByRow = Array.from({ length: boardSize }, (_, index) => index);
 
   do {
-    if (hasNoTouchingCats(columnsByRow) && usesEachColorOnce(columnsByRow, colorMatrix)) {
+    if (
+      fixedCats.every(({ row, column }) => columnsByRow[row] === column) &&
+      hasNoTouchingCats(columnsByRow) &&
+      usesEachColorOnce(columnsByRow, colorMatrix)
+    ) {
       return [...columnsByRow];
     }
   } while (advanceToNextPermutation(columnsByRow));
 
   return null;
+}
+
+function validateFixedCats(colorMatrix, fixedCats) {
+  for (let index = 0; index < fixedCats.length; index++) {
+    const cat = fixedCats[index];
+    if (
+      !Number.isInteger(cat.row) ||
+      !Number.isInteger(cat.column) ||
+      cat.row < 0 ||
+      cat.row >= colorMatrix.length ||
+      cat.column < 0 ||
+      cat.column >= colorMatrix.length
+    ) {
+      throw new Error('A fixed cat is outside the board.');
+    }
+    for (const previous of fixedCats.slice(0, index)) {
+      if (
+        cat.row === previous.row ||
+        cat.column === previous.column ||
+        colorMatrix[cat.row][cat.column] === colorMatrix[previous.row][previous.column] ||
+        (Math.abs(cat.row - previous.row) <= 1 &&
+          Math.abs(cat.column - previous.column) <= 1)
+      ) {
+        throw new Error(
+          'Detected cats conflict with the game rules. Try a clearer screenshot.',
+        );
+      }
+    }
+  }
 }
 
 // Helpers are private to this module: only solve() is exported.

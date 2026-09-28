@@ -6,7 +6,13 @@ import { startTestServer } from './helpers/server.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
-const screenshotNames = ['IMG_4186.png', 'second_level.png', '12x12.png'];
+const screenshotNames = [
+  'iphone-08x08-board-01-clean.png',
+  'iphone-08x08-level-351-clean.png',
+  'iphone-12x12-daily-0924-clean.png',
+  'iphone-08x08-board-01-partial.png',
+  'iphone-10x10-level-428-partial.png',
+];
 const viewports = [
   { width: 1280, height: 1000 },
   { width: 390, height: 844 },
@@ -29,7 +35,12 @@ test('desktop and mobile viewport upload-to-overlay flow', async (testContext) =
 
     for (const screenshotName of screenshotNames) {
       await selectAndSolve(page, screenshotName);
-      const boardSize = screenshotName === '12x12.png' ? 12 : 8;
+      const boardSize =
+        screenshotName === 'iphone-12x12-daily-0924-clean.png'
+          ? 12
+          : screenshotName === 'iphone-10x10-level-428-partial.png'
+            ? 10
+            : 8;
       assert.match(
         await page.locator('#status').innerText(),
         new RegExp(`Solved ${boardSize} × ${boardSize}`),
@@ -42,11 +53,23 @@ test('desktop and mobile viewport upload-to-overlay flow', async (testContext) =
         assert.match(accessibleSolution, /4, 8, 5, 3, 6, 2, 7, 1/);
       }
 
-      if (screenshotName === '12x12.png') {
+      if (screenshotName === 'iphone-12x12-daily-0924-clean.png') {
         const accessibleSolution = await page
           .locator('#preview')
           .getAttribute('aria-label');
         assert.match(accessibleSolution, /3, 5, 12, 6, 8, 11, 1, 9, 2, 7, 10, 4/);
+      }
+
+      if (
+        [
+          'iphone-08x08-board-01-partial.png',
+          'iphone-10x10-level-428-partial.png',
+        ].includes(screenshotName)
+      ) {
+        assert.match(
+          await page.locator('#status').innerText(),
+          /7 existing cats preserved/,
+        );
       }
 
       const fitsViewport = await page.evaluate(() => {

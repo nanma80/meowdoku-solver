@@ -5,11 +5,11 @@ import { solve } from './solver.js';
 self.onmessage = ({ data: imageData }) => {
   try {
     const board = detectBoard(imageData);
-    const solution = solve(board.colors);
+    const solution = solve(board.colors, board.fixedCats);
 
     if (!solution) {
       throw new Error(
-        'No valid solution found. Please try another untouched screenshot.',
+        'No valid solution found with the detected colors and cats. Try a clearer screenshot.',
       );
     }
 

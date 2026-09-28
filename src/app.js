@@ -89,7 +89,16 @@ function handleSolveResult(result, detectionScale) {
   const { board, solution } = result;
   drawSolution(previewContext, board, solution, detectionScale);
 
-  showStatus(`Solved ${board.size} × ${board.size} · Place a cat in each circle.`);
+  const fixedCatMessage = board.fixedCats.length
+    ? ` ${board.fixedCats.length} existing cats preserved.`
+    : '';
+  const placementMessage =
+    board.size === board.fixedCats.length
+      ? 'Board complete—all cats are correctly placed.'
+      : 'Place a cat on each white silhouette.';
+  showStatus(
+    `Solved ${board.size} × ${board.size} · ${placementMessage}${fixedCatMessage}`,
+  );
   const humanReadableColumns = solution.map((column) => column + 1).join(', ');
   previewCanvas.setAttribute(
     'aria-label',
@@ -114,7 +123,7 @@ function resetPreview() {
   solveButton.textContent = 'Solve';
   previewCanvas.hidden = true;
   emptyState.hidden = false;
-  showStatus('Start with a screenshot of an untouched board.');
+  showStatus('Choose a board screenshot. Existing cats are kept; X marks are ignored.');
 }
 
 function stopWorker() {

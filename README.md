@@ -1,6 +1,6 @@
 # Meowdoku solver
 
-A static, browser-only screenshot solver. Choose an untouched screenshot, click **Solve**, and place cats in the circles. Photos stay on the device.
+A static, browser-only screenshot solver. Choose a clean or partially filled screenshot, click **Solve**, and place cats on the white silhouettes. Existing cats are fixed placements; X marks are ignored regardless of their color. Photos stay on the device.
 
 ## Run locally
 
@@ -24,7 +24,7 @@ styles/app.css             Responsive appearance
 src/
   app.js                   UI events, preview state, and worker lifecycle
   image.js                 Local image decoding and detection-size sampling
-  overlay.js               Solution circles on the original screenshot
+  overlay.js               Cat silhouettes for new placements on the screenshot
   solver.js                Permutation search and game constraints
   solver-worker.js         Detection and solving outside the UI thread
   detection/
@@ -32,16 +32,25 @@ src/
     cells.js               Flood fill to find candidate colored cells
     grid.js                Match cells to a regular square grid
     colors.js              Sample backgrounds and assign color IDs
+    symbols.js             Recognize cats and ignore Xs at normalized cell size
+    cat-templates.js       Small grayscale reference samples of cat artwork
 scripts/server.mjs         Local static development server
+scripts/generate-cat-templates.mjs  Rebuild cat references from the seven-cat fixture
 tests/                     Solver, detection, and browser tests
 screenshots/               Input fixtures and completed-board references
 ```
 
 Start reading at `src/app.js` for the UI flow, `src/detection/board.js` for image interpretation, or `src/solver.js` for the search algorithm. Only module entry points are exported; helper functions remain private to their module.
 
-The worker receives image pixels and returns a board plus an array of zero-based cat columns. A board contains `size`, `colors` (the region-ID matrix), `palette` (RGB colors), and `cells` (a matrix of `{ x, y, width, height }`). Cell centers and dimensions are in detection-image pixels. The overlay converts them back into original-image coordinates using the sampling scale.
+The worker receives image pixels and returns a board plus an array of zero-based cat columns. A board contains `size`, `colors` (the region-ID matrix), `palette` (RGB colors), `fixedCats` (zero-based `{ row, column }` positions), and `cells` (a matrix of `{ x, y, width, height }`). Cell centers and dimensions are in detection-image pixels. The overlay converts them back into original-image coordinates using the sampling scale.
 
-Detection supports 5×5 through 12×12 and is validated on the two supplied 8×8 boards and the 12×12 daily puzzle in `screenshots/12x12.png`. Other sizes still need real screenshot validation. Existing marks and celebration overlays are not supported inputs. No manual correction controls or worst-case performance optimizations are included yet.
+Detection supports 5×5 through 12×12. Both solid-cell and marked-cell geometry searches run, and the largest regular square grid is selected. This prevents a remaining unmarked section from being mistaken for the full board. The marked-cell search allows gaps made by symbols in the colored backgrounds. Background colors come from a histogram over proportional outer bands, avoiding gutters and rounded corners. Foreground shapes are normalized to 24×24: diagonal Xs are ignored without a color assumption, while cats are approximately matched against seven reference poses. Eye pixels have less weight to tolerate animation. Unknown symbols produce a cell-specific error instead of silently imposing a cat constraint.
+
+The solver keeps the permutation algorithm and additionally requires every detected cat to match. Conflicting fixed cats are rejected before searching. This assumes displayed cats are correct, as specified by the game's behavior.
+
+Tests cover real clean 8×8/12×12 and marked 8×8/10×10 screenshots, agreement between clean and marked color matrices, resized images, small eye shifts, and synthetic rounded grids for all sizes 5–12 with white, red, black, and blue Xs. Synthetic checks do not establish support for every real device or animation frame; more real marked iPad and 12×12 screenshots would improve coverage. Celebration overlays and manual correction controls remain unsupported.
+
+To deliberately rebuild the reference artwork after changing its source fixture, run `node scripts/generate-cat-templates.mjs`, then format and test. This is not needed to run or deploy the app.
 
 ## GitHub Pages
 
